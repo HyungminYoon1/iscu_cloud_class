@@ -143,8 +143,7 @@ export default function Home() {
         <aside className="practice-note">
           <span aria-hidden="true">✓</span>
           <p>
-            이번 주에는 <code>Route Handler</code>를 만들고 Backend API와
-            연결합니다.
+            이번 주에는 영속 DB를 연결하여 Backend API를 통해 데이터를 저장합니다.
           </p>
         </aside>
       </section>
