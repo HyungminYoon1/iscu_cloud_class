@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "URL Shortener | Week 03",
-  description: "API 구성 실습",
+  title: "URL Shortener | Week 04",
+  description: "DB 연결",
 };
 
 export default function RootLayout({ children }) {
