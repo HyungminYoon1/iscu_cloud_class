@@ -3,10 +3,20 @@ import { neon } from "@neondatabase/serverless";
 const sql = neon(process.env.DATABASE_URL);
 
 export async function saveUrl(shortCode, originalUrl) {
-  await sql`
+  const insertedRows = await sql`
     INSERT INTO urls (short_code, original_url)
     VALUES (${shortCode}, ${originalUrl})
+    ON CONFLICT (short_code) DO NOTHING
+    RETURNING short_code
   `;
+
+  if (insertedRows.length === 0) {
+    const existingUrl = await findUrlByShortCode(shortCode);
+
+    if (existingUrl !== originalUrl) {
+      throw new Error("Short code collision");
+    }
+  }
 }
 
 export async function findUrlByShortCode(shortCode) {
