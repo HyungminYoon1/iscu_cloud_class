@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "URL Shortener | Week 05",
-  description: "동적 경로 적용 및 HTTP 리다이렉트",
+  title: "URL Shortener | Week 06",
+  description: "Admin 페이지 및 클릭 통계 조회",
 };
 
 export default function RootLayout({ children }) {
