@@ -3,10 +3,42 @@ import {
   getTopUrl,
   getUrlStats,
 } from "../../../lib/stats";
+import { authenticate } from "../../../lib/auth";
+import { authorize } from "../../../lib/authorization";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+// 관리자 인증 여부 확인 함수
+function authenticationRequiredResponse() {
+  return new Response("Authentication required", {
+    status: 401,
+    headers: {
+      "WWW-Authenticate": 'Basic realm="Admin"',
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
+function forbiddenResponse() {
+  return new Response("Forbidden", {
+    status: 403,
+    headers: {
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
+export async function GET(request) {
+
+  // 요청을 보낸 사용자가 누구인지 확인
+  const user = authenticate(request);
+
+  // 인증할 수 없으면 401 반환
+  if (!user) return authenticationRequiredResponse();
+
+  // 인증은 되었지만 통계를 읽을 권한이 없으면 403 반환
+  if (!authorize(user, "stats:read")) return forbiddenResponse();
+
   try {
     const summary = await getSummaryStats();
     const topUrl = await getTopUrl();
